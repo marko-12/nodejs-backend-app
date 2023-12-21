@@ -2,7 +2,8 @@ import express from "express";
 import { createConnection } from "mysql2";
 import { Sequelize, DataTypes, Model } from "sequelize";
 import userRouter from "./routes/userRoutes.js";
-//import User from "./models/User.js";
+import User from "./models/User.js";
+import productRouter from "./routes/productRoutes.js";
 
 const app = express();
 const port = 3000;
@@ -14,6 +15,15 @@ const db = new Sequelize("my_app", "sail", "password", {
   host: "localhost",
   dialect: "mysql",
 });
+
+// Test the connection
+db.authenticate()
+  .then(() => {
+    console.log("Connection has been established successfully.");
+  })
+  .catch((err) => {
+    console.error("Unable to connect to the database:", err);
+  });
 
 // const con = createConnection({
 //   host: "localhost",
@@ -27,6 +37,7 @@ const db = new Sequelize("my_app", "sail", "password", {
 // });
 
 app.use("/api/users", userRouter);
+app.use("/api/products", productRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World");

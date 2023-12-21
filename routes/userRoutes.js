@@ -11,9 +11,9 @@ userRouter.get(
   "/",
   expressAsyncHandler(async (req, res) => {
     const user = await User.create({
-      name: "marko",
+      name: "djdjdjd",
       isAdmin: true,
-      email: "marko@gmail.com",
+      email: "dj@gmail.com",
       password: "123456",
     });
     const users = await User.findAll();

@@ -1,34 +1,49 @@
-import { Sequelize, DataTypes, Model } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 
-export default (sequelize, Sequelize) => {
-  const User = sequelize.define("user", {
-    name: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: Sequelize.STRING,
-      validate: {
-        isEmail: true,
+export default (sequelize) => {
+  class User extends Model {}
+
+  User.init(
+    {
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
-      allowNull: false,
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isEmail: true,
+        },
+      },
+      isAdmin: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
-    isAdmin: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-    },
-    password: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-  });
+    {
+      sequelize,
+      modelName: "User",
+      tableName: "users",
+    }
+  );
+
   User.associate = function (models) {
     User.hasMany(models.Product, { foreignKey: "user_id" });
     User.hasMany(models.Order, { foreignKey: "user_id" });
     User.hasMany(models.Review, { foreignKey: "user_id" });
   };
-  (async () => {
-    await sequelize.sync();
-  })();
+
+  // Automatically synchronize the database when the model is imported
+  // This is typically used for development and testing purposes
+  // (async () => {
+  //   await sequelize.sync();
+  // })();
+  sequelize.sync();
+
   return User;
 };
