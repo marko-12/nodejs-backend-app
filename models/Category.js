@@ -1,15 +1,25 @@
-export default (sequelize, Sequelize) => {
-  const Category = sequelize.define("category", {
-    name: {
-      type: Sequelize.STRING,
-      allowNull: false,
+import { DataTypes, Model } from "sequelize";
+
+export default (sequelize) => {
+  class Category extends Model {}
+
+  Category.init(
+    {
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
-  });
+    {
+      sequelize,
+      modelName: "Category",
+      tableName: "categories",
+    }
+  );
+
   Category.associate = function (models) {
-    Category.hasMany(models.Product, { foreignKey: "category_id" });
+    Category.hasMany(models.User, { foreignKey: "category_id" });
   };
-  (async () => {
-    await sequelize.sync();
-  })();
+
   return Category;
 };

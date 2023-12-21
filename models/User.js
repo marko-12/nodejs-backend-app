@@ -43,7 +43,6 @@ export default (sequelize) => {
   // (async () => {
   //   await sequelize.sync();
   // })();
-  sequelize.sync();
 
   return User;
 };
